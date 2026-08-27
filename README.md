@@ -1,5 +1,4 @@
-````markdown
-# 🎓 AWS LAMP Student Portal
+🎓 AWS LAMP Student Portal
 
 A cloud-based Student Management Portal built using the **LAMP stack** and deployed on **Amazon Web Services (AWS)**.
 
@@ -24,7 +23,7 @@ The application provides a simple Student Management Portal where student inform
 
 ---
 
-# ☁️ AWS Services Used
+☁️ AWS Services Used
 
 | AWS Service | Purpose |
 |---|---|
@@ -35,7 +34,7 @@ The application provides a simple Student Management Portal where student inform
 
 ---
 
-# 🛠️ Technologies Used
+🛠️ Technologies Used
 
 - Amazon Web Services (AWS)
 - Amazon EC2
