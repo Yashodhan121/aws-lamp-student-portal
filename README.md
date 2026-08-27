@@ -211,28 +211,19 @@ The PHP application communicates with RDS through MySQL port `3306`.
 
 ---
 
+
+### Replace it with this:
+
+```markdown
 # 📁 Project Structure
 
 ```text
 aws-lamp-student-portal/
 │
 ├── README.md
-│
 ├── index.php
-│
 ├── add_student.php
-│
-├── db.php
-│
-└── screenshots/
-    │
-    ├── ec2-instance.png
-    ├── security-group.png
-    ├── rds-database.png
-    ├── rds-connectivity.png
-    ├── mysql-table.png
-    ├── add-student.png
-    └── student-portal.png
+└── db.php
 ```
 
 ---
