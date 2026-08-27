@@ -1,5 +1,3 @@
-# aws-lamp-student-portal
-
 ````markdown
 # 🎓 AWS LAMP Student Portal
 
@@ -9,7 +7,7 @@ The application allows users to add and view student information through a PHP w
 
 ---
 
-# 📌 Project Objective
+📌 Project Objective
 
 The objective of this project is to deploy a traditional PHP-based web application on AWS using the **LAMP architecture**.
 
@@ -34,51 +32,20 @@ The application provides a simple Student Management Portal where student inform
 | Amazon RDS | Provides the managed MySQL database |
 | Amazon VPC | Provides the networking environment |
 | Security Groups | Controls network access |
-| IAM | Provides AWS identity and access management |
-| Amazon CloudWatch | Used for monitoring and logs |
 
 ---
 
 # 🛠️ Technologies Used
 
-## Cloud
-
 - Amazon Web Services (AWS)
-
-## Compute
-
 - Amazon EC2
-
-## Operating System
-
 - Ubuntu Linux
-
-## Web Server
-
 - Apache2
-
-## Backend
-
 - PHP
-
-## Database
-
-- MySQL 8.4.9
+- MySQL
 - Amazon RDS
-
-## Networking
-
-- Amazon VPC
-- Internet Gateway
-- Security Groups
-- Subnets
-- Route Tables
-
-## Development
-
 - HTML
 - CSS
-- PHP
 - SQL
 
 ---
@@ -98,13 +65,13 @@ The application provides a simple Student Management Portal where student inform
               ┌─────────────────────────────┐
               │          AWS EC2            │
               │                             │
-              │       Ubuntu Linux         │
+              │       Ubuntu Linux          │
               │             │               │
               │          Apache             │
               │             │               │
               │           PHP               │
               │                             │
-              │      lamp-web-server        │
+              │      Student Portal         │
               └──────────────┬──────────────┘
                              │
                              │ MySQL :3306
@@ -112,10 +79,8 @@ The application provides a simple Student Management Portal where student inform
               ┌─────────────────────────────┐
               │         Amazon RDS          │
               │                             │
-              │       MySQL 8.4.9           │
-              │                             │
-              │       lamp-mysql-db         │
-              │                             │
+              │           MySQL             │
+              │             │               │
               │        student_db           │
               │             │               │
               │          students           │
@@ -152,7 +117,7 @@ PHP Application
                   Submit Form
                        │
                        ▼
-                  db.php
+                     db.php
                        │
                        ▼
                 MySQL Connection
@@ -174,7 +139,7 @@ PHP Application
 
 # 🧩 Architecture Explanation
 
-The project uses a three-layer logical architecture:
+The project uses a three-layer logical architecture.
 
 ### 1. Presentation Layer
 
@@ -186,7 +151,7 @@ The browser sends HTTP requests to the EC2 server.
 
 The application runs on an Ubuntu Linux EC2 instance.
 
-Apache receives the HTTP request and executes the PHP application.
+Apache receives HTTP requests and executes the PHP application.
 
 The main PHP files are:
 
@@ -211,10 +176,6 @@ The PHP application communicates with RDS through MySQL port `3306`.
 
 ---
 
-
-### Replace it with this:
-
-```markdown
 # 📁 Project Structure
 
 ```text
@@ -230,95 +191,52 @@ aws-lamp-student-portal/
 
 # 🖥️ AWS EC2 Configuration
 
-The web server is hosted on an Amazon EC2 instance.
+The web application is hosted on an Amazon EC2 instance running Ubuntu Linux.
 
-## EC2 Instance
+The EC2 server is configured with:
 
-```text
-Instance Name: lamp-web-server
-Instance ID: i-0ce25618ba1872faa
-Operating System: Ubuntu Linux
-Region: ap-south-1
-Availability Zone: ap-south-1b
-```
+* Ubuntu Linux
+* Apache2 web server
+* PHP
+* MySQL client
+* Public web access through HTTP port 80
 
-The EC2 instance has:
-
-- Public IPv4 address
-- Internet connectivity
-- Apache web server
-- PHP
-- MySQL client
+The EC2 instance hosts the PHP application files and communicates with Amazon RDS for database operations.
 
 ---
 
 # 🌐 VPC Configuration
 
-The EC2 instance is deployed inside the default VPC.
+The application is deployed within an AWS VPC.
 
-```text
-VPC:
-vpc-0072b88e7ac7eaead
-```
+The VPC provides the networking environment required for communication between the EC2 application server and Amazon RDS.
 
-The EC2 instance is located in:
+The network configuration includes:
 
-```text
-Subnet:
-subnet-0231f265b0d47e36d
-```
+* VPC
+* Subnet
+* Route Table
+* Internet Gateway
+* Security Groups
 
-Subnet CIDR:
-
-```text
-172.31.0.0/20
-```
-
-The subnet has public IPv4 auto-assignment enabled.
-
-The associated route table contains:
-
-```text
-172.31.0.0/16 → local
-0.0.0.0/0     → Internet Gateway
-```
-
-This allows the EC2 instance to communicate with the internet.
+The EC2 instance has internet connectivity so that users can access the web application.
 
 ---
 
 # 🔐 Security Group Configuration
 
-The EC2 Security Group controls inbound traffic to the web server.
-
-Security Group:
-
-```text
-launch-wizard-9
-```
-
-Security Group ID:
-
-```text
-sg-028445c8c0cff3352
-```
+AWS Security Groups are used to control network access to the application.
 
 ## Inbound Rules
 
-| TypeProtocolPortSourcePurpose |     |    |                     |                              |
-| ----------------------------- | --- | -- | ------------------- | ---------------------------- |
-| HTTP                          | TCP | 80 | 0.0.0.0/0           | Public web access            |
-| SSH                           | TCP | 22 | Administrator IP/32 | Secure server administration |
+| Type | Protocol | Port | Source           | Purpose                      |
+| ---- | -------- | ---: | ---------------- | ---------------------------- |
+| HTTP | TCP      |   80 | 0.0.0.0/0        | Public web access            |
+| SSH  | TCP      |   22 | Administrator IP | Secure server administration |
 
-SSH access is restricted to the administrator's IP address.
+SSH access should be restricted to the administrator's IP address.
 
-Example:
-
-```text
-152.58.31.62/32
-```
-
-The administrator's public IP may change over time, so the Security Group should be updated when required.
+The RDS Security Group should allow MySQL traffic on port `3306` only from the application server's Security Group.
 
 ---
 
@@ -338,15 +256,11 @@ Avoid:
 
 for SSH whenever possible.
 
----
-
 ## HTTP Security
 
 Port 80 is publicly accessible because users need to access the Student Portal.
 
 For a production deployment, HTTPS should be implemented.
-
----
 
 ## RDS Security
 
@@ -418,32 +332,9 @@ The actual credentials should be configured securely on the server and should no
 
 The database is hosted using Amazon RDS for MySQL.
 
-## RDS Instance
+The RDS database provides managed MySQL storage for the Student Portal.
 
-```text
-DB Identifier:
-lamp-mysql-db
-
-Engine:
-MySQL Community
-
-Engine Version:
-8.4.9
-
-Instance Class:
-db.t3.micro
-
-Storage:
-20 GiB
-
-Region:
-ap-south-1
-
-Availability Zone:
-ap-south-1b
-```
-
-The RDS instance is configured to communicate with the EC2 application.
+The application server connects to the RDS database using MySQL on port `3306`.
 
 ---
 
@@ -484,14 +375,14 @@ CREATE TABLE students (
 
 # 📋 Database Structure
 
-| ColumnData TypeDescription |              |                      |
-| -------------------------- | ------------ | -------------------- |
-| id                         | INT          | Unique student ID    |
-| name                       | VARCHAR(100) | Student name         |
-| email                      | VARCHAR(100) | Student email        |
-| phone                      | VARCHAR(20)  | Student phone number |
-| course                     | VARCHAR(100) | Student course       |
-| created\_at                | TIMESTAMP    | Record creation time |
+| Column     | Data Type    | Description          |
+| ---------- | ------------ | -------------------- |
+| id         | INT          | Unique student ID    |
+| name       | VARCHAR(100) | Student name         |
+| email      | VARCHAR(100) | Student email        |
+| phone      | VARCHAR(20)  | Student phone number |
+| course     | VARCHAR(100) | Student course       |
+| created_at | TIMESTAMP    | Record creation time |
 
 ---
 
@@ -534,11 +425,11 @@ The application provides a Student Management Portal.
 
 The `add_student.php` page provides a form containing:
 
-- Student Name
-- Email
-- Phone
-- Course
-- Add Student button
+* Student Name
+* Email
+* Phone
+* Course
+* Add Student button
 
 When the form is submitted:
 
@@ -588,13 +479,13 @@ The results are displayed in a table.
 
 The Student Portal provides a user-friendly interface with:
 
-- 🎓 Student Portal header
-- 📊 Student information
-- ➕ Add Student button
-- 📋 Student records table
-- ☁️ AWS-based deployment information
-- 🟢 Application/database status
-- Responsive design
+* 🎓 Student Portal header
+* 📊 Student information
+* ➕ Add Student button
+* 📋 Student records table
+* ☁️ AWS-based deployment information
+* 🟢 Application/database status
+* Responsive design
 
 ---
 
@@ -605,8 +496,6 @@ The Student Portal provides a user-friendly interface with:
 ```bash
 sudo apt update
 ```
-
----
 
 ## Step 2 — Install Apache
 
@@ -665,7 +554,7 @@ sudo apt install mysql-client -y
 The RDS database can be accessed from the EC2 server using:
 
 ```bash
-mysql -h YOUR_RDS_ENDPOINT -P 3306 -u lampadmin -p
+mysql -h YOUR_RDS_ENDPOINT -P 3306 -u YOUR_DATABASE_USERNAME -p
 ```
 
 After successful authentication:
@@ -734,29 +623,21 @@ sudo systemctl restart apache2
 
 # 🌐 Access the Application
 
-After deployment, open the EC2 public IPv4 address in a browser:
+After deployment, the application can be accessed using the public IPv4 address of the EC2 instance:
 
 ```text
 http://YOUR_EC2_PUBLIC_IP
 ```
 
-Example format:
-
-```text
-http://13.235.76.208
-```
-
-The public IP can change if the EC2 instance is stopped and started unless an Elastic IP is configured.
+The public IP is specific to the deployed AWS environment and should not be hard-coded in this repository.
 
 ---
 
 # 🧪 Testing
 
-The application was tested using the following process:
+The application can be tested using the following process.
 
 ### Test 1 — Apache
-
-Verify Apache:
 
 ```bash
 sudo systemctl status apache2
@@ -768,11 +649,7 @@ Expected:
 active (running)
 ```
 
----
-
 ### Test 2 — PHP
-
-Verify PHP:
 
 ```bash
 php -v
@@ -784,14 +661,10 @@ Expected:
 PHP version information
 ```
 
----
-
 ### Test 3 — RDS
 
-Connect:
-
 ```bash
-mysql -h YOUR_RDS_ENDPOINT -P 3306 -u lampadmin -p
+mysql -h YOUR_RDS_ENDPOINT -P 3306 -u YOUR_DATABASE_USERNAME -p
 ```
 
 Expected:
@@ -799,8 +672,6 @@ Expected:
 ```text
 Welcome to the MySQL monitor.
 ```
-
----
 
 ### Test 4 — Database
 
@@ -814,8 +685,6 @@ Expected:
 Database changed
 ```
 
----
-
 ### Test 5 — Table
 
 ```sql
@@ -828,8 +697,6 @@ Expected:
 students
 ```
 
----
-
 ### Test 6 — Student Data
 
 ```sql
@@ -841,8 +708,6 @@ Expected:
 ```text
 Student records stored in the database
 ```
-
----
 
 ### Test 7 — Web Application
 
@@ -857,8 +722,6 @@ Expected:
 ```text
 AWS Student Portal
 ```
-
----
 
 ### Test 8 — Add Student
 
@@ -879,9 +742,9 @@ Add Student
 
 The information should be stored in Amazon RDS.
 
-# 🚀 Complete Deployment Process
+---
 
-The complete deployment process is:
+# 🚀 Complete Deployment Process
 
 ```text
 1. Create AWS VPC/network
@@ -925,17 +788,17 @@ The complete deployment process is:
 
 The current application provides:
 
-- 🎓 Student Portal
-- 👨‍🎓 Add student information
-- 📋 View student records
-- 🗄️ MySQL database
-- ☁️ Amazon RDS database hosting
-- 💻 Amazon EC2 hosting
-- 🐧 Ubuntu Linux
-- 🌐 Apache web server
-- 🐘 PHP backend
-- 🔐 Security Group configuration
-- 📱 Responsive user interface
+* 🎓 Student Portal
+* 👨‍🎓 Add student information
+* 📋 View student records
+* 🗄️ MySQL database
+* ☁️ Amazon RDS database hosting
+* 💻 Amazon EC2 hosting
+* 🐧 Ubuntu Linux
+* 🌐 Apache web server
+* 🐘 PHP backend
+* 🔐 Security Group configuration
+* 📱 Responsive user interface
 
 ---
 
@@ -947,24 +810,18 @@ The application can be improved further by adding:
 
 Allow administrators to modify student information.
 
----
-
 ## 2. Delete Student
 
 Allow administrators to delete student records.
-
----
 
 ## 3. Search
 
 Add a search function to find students by:
 
-- Name
-- Email
-- Course
-- Phone
-
----
+* Name
+* Email
+* Course
+* Phone
 
 ## 4. Dashboard
 
@@ -976,44 +833,34 @@ Total Courses
 Recently Added Students
 ```
 
----
-
 ## 5. Authentication
 
 Add an administrator login system.
-
----
 
 ## 6. HTTPS
 
 Configure HTTPS using SSL/TLS.
 
----
-
 ## 7. AWS Secrets Manager
 
 Store database credentials securely using AWS Secrets Manager instead of hard-coding credentials.
 
----
-
-## 8. CloudWatch Monitoring
+## 8. Monitoring
 
 Add monitoring for:
 
-- EC2 CPU utilization
-- Application logs
-- Apache logs
-- RDS metrics
-
----
+* EC2 CPU utilization
+* Application logs
+* Apache logs
+* RDS metrics
 
 ## 9. Automated Deployment
 
 The application can be integrated with:
 
-- GitHub
-- AWS CodePipeline
-- AWS CodeDeploy
+* GitHub
+* AWS CodePipeline
+* AWS CodeDeploy
 
 for automated deployments.
 
@@ -1042,15 +889,15 @@ For a production environment, the following architecture is recommended:
 
 Recommended security improvements:
 
-- Use HTTPS
-- Restrict SSH access
-- Use IAM roles instead of long-term AWS credentials
-- Use AWS Secrets Manager
-- Keep RDS private where possible
-- Allow RDS access only from the application Security Group
-- Enable backups
-- Enable monitoring
-- Apply operating system updates regularly
+* Use HTTPS
+* Restrict SSH access
+* Use IAM roles instead of long-term AWS credentials
+* Use AWS Secrets Manager
+* Keep RDS private where possible
+* Allow RDS access only from the application Security Group
+* Enable backups
+* Enable monitoring
+* Apply operating system updates regularly
 
 ---
 
@@ -1060,46 +907,45 @@ This project provided practical experience with:
 
 ### AWS
 
-- Launching EC2 instances
-- Configuring Amazon RDS
-- Working with VPCs
-- Configuring Security Groups
-- Understanding public and private networking
-- Understanding AWS IAM
+* Launching EC2 instances
+* Configuring Amazon RDS
+* Working with VPCs
+* Configuring Security Groups
+* Understanding public and private networking
 
 ### Linux
 
-- Ubuntu server administration
-- Package installation
-- Apache configuration
-- File permissions
-- Linux services
+* Ubuntu server administration
+* Package installation
+* Apache configuration
+* File permissions
+* Linux services
 
 ### Web Development
 
-- Apache web server
-- PHP
-- HTML
-- CSS
-- Form handling
+* Apache web server
+* PHP
+* HTML
+* CSS
+* Form handling
 
 ### Database
 
-- MySQL
-- SQL
-- Database creation
-- Table creation
-- INSERT operations
-- SELECT operations
-- PHP-to-MySQL connectivity
+* MySQL
+* SQL
+* Database creation
+* Table creation
+* INSERT operations
+* SELECT operations
+* PHP-to-MySQL connectivity
 
 ### Security
 
-- Restricting SSH access
-- Protecting credentials
-- Security Group configuration
-- Database access control
-- Principle of least privilege
+* Restricting SSH access
+* Protecting credentials
+* Security Group configuration
+* Database access control
+* Principle of least privilege
 
 ---
 
@@ -1108,8 +954,6 @@ This project provided practical experience with:
 During project evaluation, the architecture can be explained as follows:
 
 > This project is a cloud-hosted Student Management Portal based on the LAMP architecture. I deployed an Ubuntu Linux server on Amazon EC2. Apache acts as the web server and PHP handles the application logic. Student information is stored in Amazon RDS MySQL instead of being stored locally on the EC2 instance. The PHP application connects to RDS using MySQL on port 3306. AWS Security Groups control network access. HTTP port 80 is open for users to access the application, while SSH port 22 is restricted to my administrator IP. The database is protected by restricting database access to the application server. This architecture separates the web application from the database and uses managed AWS services for compute and database infrastructure.
-
----
 
 ---
 
@@ -1147,21 +991,19 @@ An Elastic IP or a domain name can be used for a more stable endpoint.
 
 # 📊 Project Summary
 
-| ComponentImplementation |                 |
-| ----------------------- | --------------- |
-| Cloud Platform          | AWS             |
-| Compute                 | Amazon EC2      |
-| OS                      | Ubuntu Linux    |
-| Web Server              | Apache          |
-| Application             | PHP             |
-| Database                | Amazon RDS      |
-| DB Engine               | MySQL 8.4.9     |
-| Database Name           | `student_db`    |
-| Table                   | `students`      |
-| Networking              | Amazon VPC      |
-| Firewall                | Security Groups |
-| Monitoring              | CloudWatch      |
-| Access Management       | IAM             |
+| Component      | Implementation  |
+| -------------- | --------------- |
+| Cloud Platform | AWS             |
+| Compute        | Amazon EC2      |
+| OS             | Ubuntu Linux    |
+| Web Server     | Apache          |
+| Application    | PHP             |
+| Database       | Amazon RDS      |
+| DB Engine      | MySQL           |
+| Database Name  | `student_db`    |
+| Table          | `students`      |
+| Networking     | Amazon VPC      |
+| Firewall       | Security Groups |
 
 ---
 
@@ -1189,18 +1031,17 @@ students table
 
 The project demonstrates practical knowledge of:
 
-- Cloud computing
-- AWS EC2
-- AWS RDS
-- Linux
-- Apache
-- PHP
-- MySQL
-- SQL
-- VPC networking
-- Security Groups
-- IAM
-- Web application deployment
+* Cloud computing
+* AWS EC2
+* AWS RDS
+* Linux
+* Apache
+* PHP
+* MySQL
+* SQL
+* VPC networking
+* Security Groups
+* Web application deployment
 
 ---
 
@@ -1228,4 +1069,3 @@ MCA Student
 
 **Academic / Educational AWS Cloud Project**
 
----
